@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     private bool canMove;
     private Rigidbody2D RB;
 
+    [SerializeField]
+    private GameObject healthContainer;
+
     void Start()
     {
         RB = GetComponent<Rigidbody2D>();
@@ -43,6 +46,11 @@ public class PlayerController : MonoBehaviour
         {
            velocity = InputManager.Instance.Movement();
             RB.velocity = new Vector2(velocity.x * speed, velocity.y * speed);
+        }
+        if (Input.GetButtonDown("Jump"))
+        {
+            GameObject prefab = Instantiate(healthContainer);
+            prefab.name = "Health Container";
         }
     }
     

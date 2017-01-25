@@ -1,51 +1,59 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Health : MonoBehaviour
 {
-    public float maxHealth;
-    protected float currentHealth;
+    [SerializeField]
+    private float maxHealth = 100;
+    [SerializeField]
+    private float currentHealth;
+    [SerializeField]
+    private float minHealth = 0.0f;
+    [SerializeField]
+    private Image healthBar;
+    [SerializeField]
+    private Text healthStatus;
 
-    //FIX:This is not clamping the currentHealth value 
-    public float CurrentHealth
+    void Start()
     {
-        get
-        {
-            return currentHealth;
-        }
-        set
-        {
-            currentHealth = Mathf.Clamp(value, 0, maxHealth);
+        currentHealth = maxHealth;
+        
+        
+
+    }
+
+    void UpdateHealth()
+    {
+
+        float healthPercent = currentHealth / maxHealth;
+        
+        healthBar.rectTransform.localScale = new Vector3(healthPercent, 1, 1);
+        
+        healthStatus.text = (healthPercent * 100.0f).ToString() + "%";
+        
             
+    }
+    
+    public void AddHealth(float amount)
+    {
+        currentHealth += amount;
+        if((currentHealth + amount) > maxHealth)
+        {
+            currentHealth = maxHealth;
         }
+        UpdateHealth();
     }
 
     public void RemoveHealth(float amount)
     {
-        if(amount < CurrentHealth)
+        currentHealth -= amount;
+        if((currentHealth - amount) <= 0)
         {
-            CurrentHealth -= amount;
+            currentHealth = 0.0f;
         }
-        else if(amount >= CurrentHealth)
-        {
-            CurrentHealth = 0.0f; //remove this "else if" if property field for CurrentHealth has been fixed
-        }
-    }
-
-    public void AddHealth(float amount)
-    {
-        if(amount >= maxHealth)
-        {
-            CurrentHealth = maxHealth;
-        }
-        else if(amount < 0)
-        {
-            CurrentHealth = CurrentHealth;
-        }
-        else
-        {
-            CurrentHealth += amount;
-        }
+        UpdateHealth();
+        
+      
     }
 }
