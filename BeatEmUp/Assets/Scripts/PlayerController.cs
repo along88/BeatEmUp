@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [HideInInspector]
+    public bool canMove;
     private float speed;
     private float minJumpHeight;
     private float maxJumpHeight;
@@ -15,15 +17,22 @@ public class PlayerController : MonoBehaviour
     private float airAccelerationTime;
     private float accelerationGroundTime;
     private Vector2 input;
-    private Vector2 velocity;
-    private bool canMove;
+    public Vector2 velocity;
     private Rigidbody2D RB;
+    public BoxCollider2D playerBound;
+    private GameObject spawnPoint;
 
     [SerializeField]
     private GameObject healthContainer;
 
+    private void Awake()
+    {
+        playerBound = GetComponent<BoxCollider2D>();
+        spawnPoint = GameObject.FindGameObjectWithTag("Spawn");
+    }
     void Start()
     {
+        transform.position = spawnPoint.transform.position;
         RB = GetComponent<Rigidbody2D>();
         speed = 3.0f;
         minJumpHeight = 0.2f;
@@ -53,5 +62,6 @@ public class PlayerController : MonoBehaviour
             prefab.name = "Health Container";
         }
     }
+    
     
 }

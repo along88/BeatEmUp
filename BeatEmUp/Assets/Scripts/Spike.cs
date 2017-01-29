@@ -5,6 +5,8 @@ using UnityEngine;
 public class Spike : MonoBehaviour
 {
     private Health playerHealth;
+    [SerializeField]
+    private float dmg;
 
     void Awake()
     {
@@ -16,7 +18,7 @@ public class Spike : MonoBehaviour
     {
         if (coll.gameObject.tag == "Player")
         {
-            playerHealth.RemoveHealth(10.0f);
+            playerHealth.RemoveHealth(dmg);
         }
 
     }

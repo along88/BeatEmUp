@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Health : MonoBehaviour
 {
-    [SerializeField]
-    private int lives = 3;
-    [SerializeField]
-    private Text livesText;
+    
+    
+    private Lives lives;
+    private RespawnManager respawn;
     [SerializeField]
     private float maxHealth = 100;
     [SerializeField]
@@ -18,7 +18,17 @@ public class Health : MonoBehaviour
     private Image healthBar;
     [SerializeField]
     private Text healthStatus;
+    private SpriteRenderer sr;
+    [SerializeField]
+    private float respawnTime;
 
+    private void Awake()
+    {
+
+        lives = GameObject.FindGameObjectWithTag("Player").GetComponent<Lives>();
+        sr = GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>();
+        respawn = GameObject.FindGameObjectWithTag("Player").GetComponent<RespawnManager>();
+    }
     void Start()
     {
         currentHealth = maxHealth;
@@ -26,6 +36,14 @@ public class Health : MonoBehaviour
         
 
     }
+    private void LateUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            
+        }
+    }
+
 
     void UpdateHealth()
     {
@@ -35,8 +53,8 @@ public class Health : MonoBehaviour
         healthBar.rectTransform.localScale = new Vector3(healthPercent, 1, 1);
         
         healthStatus.text = (healthPercent * 100.0f).ToString() + "%";
-        livesText.text = lives.ToString();
-
+        
+        
 
     }
     
@@ -53,25 +71,16 @@ public class Health : MonoBehaviour
     public void RemoveHealth(float amount)
     {
         currentHealth -= amount;
-        if((currentHealth - amount) <= 0)
+        if((currentHealth - amount) <= 0.0f)
         {
             currentHealth = 0.0f;
-            lives -= 1;
-            if (lives <= 0)
-            {
-                lives = 0;
-                Destroy(gameObject);
-            }
-            else
-            { 
-                //TODO: Place respawn/reset logic here
-              
-            }
-
-
+            lives.LoseLife();
+            respawn.isDead = true;
         }
         UpdateHealth();
         
       
     }
+
+    
 }
